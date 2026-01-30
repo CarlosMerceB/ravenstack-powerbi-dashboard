@@ -2,7 +2,7 @@
 
 > Comprehensive Power BI solution analyzing €2.3M in B2B SaaS revenue across 99 customers, 48 countries, and 14 products (2020-2023)
 
-![Executive Summary](docs/Screenshots/01_Executive_Summary.png)
+![Executive Summary](docs/Screenshots/01_Executive_Summary.jpg)
 
 ---
 
@@ -172,27 +172,27 @@ CFO-ready analysis including:
 <summary><b>Click to view all dashboard pages</b></summary>
 
 ### Executive Summary
-![Executive Summary](docs/Screenshots/01_Executive_Summary.png)
+![Executive Summary](docs/Screenshots/01_Executive_Summary.jpg)
 *Financial KPIs, growth trends, segment analysis*
 
 ### Customer Analysis
-![Customer Analysis](docs/Screenshots/02_Customer_Analysis.png)
+![Customer Analysis](docs/Screenshots/02_Customer_Analysis.jpg)
 *Customer segmentation, top accounts, industry distribution*
 
 ### Geography Analysis
-![Geography Analysis](docs/Screenshots/03_Geography_Analysis.png)
+![Geography Analysis](docs/Screenshots/03_Geography_Analysis.jpg)
 *Regional performance, Pareto analysis, market opportunities*
 
 ### Portfolio Analysis
-![Portfolio Analysis](docs/Screenshots/04_Portfolio_Analysis.png)
+![Portfolio Analysis](docs/Screenshots/04_Portfolio_Analysis.jpg)
 *Product profitability, portfolio matrix, strategic positioning*
 
 ### Customer Drill-Through (Interactive Feature)
-![Customer Profile](docs/Screenshots/05_Customer_Drillthrough.png)
+![Customer Profile](docs/Screenshots/05_Customer_Drillthrough.jpg)
 *Individual customer deep-dive with purchase history*
 
 ### Multi-Dimensional Tooltips (Interactive Feature)
-![Tooltip Demo](docs/Screenshots/06_Tooltip_Demo.png)
+![Tooltip Demo](docs/Screenshots/06_Tooltip_Demo.jpg)
 *Hover interactions showing product-customer relationships*
 
 </details>
