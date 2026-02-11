@@ -114,28 +114,17 @@ CFO-oriented analysis: current state assessment, risk prioritization, three stra
 
 ## Dashboard Screenshots
 
-<details>
-<summary><b>View all pages</b></summary>
+![Executive Summary](docs/Screenshots/01_Executive_Summary.jpg)
 
-<h3>Executive Summary</h3>
-<img src="docs/Screenshots/01_Executive_Summary.jpg" alt="Executive Summary">
+![Customer Analysis](docs/Screenshots/02_Customer_Analysis.jpg)
 
-<h3>Customer Analysis</h3>
-<img src="docs/Screenshots/02_Customer_Analysis.jpg" alt="Customer Analysis">
+![Geography Analysis](docs/Screenshots/03_Geography_Analysis.jpg)
 
-<h3>Geography Analysis</h3>
-<img src="docs/Screenshots/03_Geography_Analysis.jpg" alt="Geography Analysis">
+![Portfolio Analysis](docs/Screenshots/04_Portfolio_Analysis.jpg)
 
-<h3>Portfolio Analysis</h3>
-<img src="docs/Screenshots/04_Portfolio_Analysis.jpg" alt="Portfolio Analysis">
+![Customer Drill-Through](docs/Screenshots/05_Customer_Drillthrough.jpg)
 
-<h3>Customer Drill-Through</h3>
-<img src="docs/Screenshots/05_Customer_Drillthrough.jpg" alt="Customer Profile">
-
-<h3>Tooltips</h3>
-<img src="docs/Screenshots/06_Tooltip_Demo.jpg" alt="Tooltip Demo">
-
-</details>
+![Tooltips](docs/Screenshots/06_Tooltip_Demo.jpg)
 
 ---
 
