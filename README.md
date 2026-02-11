@@ -164,3 +164,7 @@ CFO-oriented analysis: current state assessment, risk prioritization, three stra
 ---
 
 Built as part of my transition into Business Intelligence and Financial Analysis. The focus was on demonstrating end-to-end capability: from data validation and modeling through to strategic business recommendations that a leadership team could act on.
+
+---
+
+Built as part of my transition into Business Intelligence and Financial Analysis. The focus was on demonstrating end-to-end capability: from data validation and modeling through to strategic business recommendations that a leadership team could act on.
