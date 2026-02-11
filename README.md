@@ -1,89 +1,59 @@
 # RavenStack SaaS Financial Analytics Dashboard
 
-> Comprehensive Power BI solution analyzing €2.3M in B2B SaaS revenue across 99 customers, 48 countries, and 14 products (2020-2023)
+Power BI dashboard analyzing €2.3M in B2B SaaS revenue across 99 customers, 48 countries, and 14 products (2020–2023). Built as a CFO-ready tool to surface business risks, growth levers, and actionable recommendations.
 
 ![Executive Summary](docs/Screenshots/01_Executive_Summary.jpg)
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
-**Challenge:** Build a CFO-ready financial analytics dashboard to identify business risks, growth opportunities, and strategic recommendations for a B2B SaaS company.
+The goal was to take a raw transactional dataset and turn it into something a finance team could actually use — not just charts, but a tool that answers questions like *where are we losing money*, *which customers are at risk*, and *what should we prioritize next quarter*.
 
-**Key Finding:** Discovered critical customer retention issue with **0% year-over-year consistency** in top revenue customers, representing >€200K in potential lost revenue annually.
+The most significant finding: **zero consistency in top revenue customers year-over-year**. The top 5 accounts reshuffled completely every year, representing over €200K in unstable revenue. That insight alone shaped the strategic recommendations.
 
-**Impact:** Delivered 3 strategic priorities with **€400K+ projected profit improvement** over 3 years.
-
----
-
-## 📊 Dashboard Components
-
-### 1. Executive Summary
-Financial KPIs, growth trends, revenue by segment
-- CAGR: 14.87% (2020-2023)
-- Profit margin: 12.47%
-- Dynamic YoY/QoQ comparisons with conditional logic
-
-### 2. Customer Analysis
-Customer segmentation, retention analysis, top accounts
-- 99 customers, €5.8K average annual revenue per customer
-- Industry distribution analysis
-- **Interactive drill-through** to individual customer profiles
-
-### 3. Geography Analysis
-Regional performance, market concentration, expansion opportunities
-- 48 countries, 262 cities
-- Pareto 20/80: 10 countries = 69% revenue
-- **Custom tooltip:** Hover over country → See top 3 products
-
-### 4. Portfolio Analysis
-Product profitability, portfolio matrix, strategic positioning
-- 14 products analyzed
-- Alchemy: 40% margin, 473% growth (star product)
-- ContactMatcher: Loss leader strategy (-0.3% margin, top revenue)
-- **Custom tooltip:** Hover over product → See top 3 customers
+**Projected impact of proposed actions:** €400K+ in profit improvement over 3 years.
 
 ---
 
-## 🔧 Technical Implementation
+## Dashboard Pages
+
+### Executive Summary
+Financial KPIs, growth trends, revenue by segment. CAGR of 14.87% (2020–2023), profit margin at 12.47%. Includes dynamic YoY/QoQ comparisons with conditional logic that suppresses misleading comparisons when filters don't support them.
+
+### Customer Analysis
+Segmentation, retention patterns, top accounts. 99 customers with €5.8K average annual revenue per customer. Interactive drill-through to individual customer profiles with full purchase history and product mix.
+
+### Geography Analysis
+Regional performance and market concentration across 48 countries and 262 cities. Pareto analysis shows 10 countries driving 69% of revenue. Custom tooltips let you hover over any country to see its top 3 products.
+
+### Portfolio Analysis
+Product profitability and strategic positioning for all 14 products. Highlights include Alchemy (40% margin, 473% growth — clear star product) and ContactMatcher (top revenue generator but -0.3% margin in 2023, functioning as a loss leader). Custom tooltips show top 3 customers per product on hover.
+
+---
+
+## Technical Implementation
 
 ### Data Architecture
-- **Source:** AWS SaaS Sales dataset (Kaggle) - 9,800 transactions
-- **Validation:** SQL quality checks before Power BI import
-- **Model:** Star schema (1 fact table, 4 dimension tables)
-- **Grain:** Transaction-level sales data
+- **Source:** AWS SaaS Sales dataset (Kaggle) — 9,800 transactions
+- **Validation:** SQL quality checks run before importing into Power BI
+- **Model:** Star schema with 1 fact table and 4 dimension tables
+- **Grain:** Transaction-level
 
-### Advanced Features
-
-**1. Star Schema Design**
 ```
 FactTable (9,800 rows)
-    ├── DimDate (1,461 rows) - Time intelligence
-    ├── DimCustomer (99 rows) - Customer master
-    ├── DimGeography (262 rows) - Location hierarchy
-    └── DimProduct (14 rows) - Product catalog
+    ├── DimDate (1,461 rows)
+    ├── DimCustomer (99 rows)
+    ├── DimGeography (262 rows)
+    └── DimProduct (14 rows)
 ```
 
-**2. DAX Measures (50+ total)**
-- Base metrics (Sales, Profit, Orders)
-- Time intelligence (YoY, QoQ, YTD, CAGR)
-- Context-aware comparisons (shows "--" when inappropriate)
-- Annualized averages (normalized cross-period)
-- Pareto analysis (20/80 rule)
-- Product ranking with conditional logic
+### DAX (50+ measures)
 
-**3. Advanced DAX Examples**
+The measure library covers base metrics, time intelligence (YoY, QoQ, YTD, CAGR), annualized averages for cross-period comparison, Pareto calculations, and product rankings.
 
-**SAMEPERIODLASTYEAR for accurate comparisons:**
-```dax
-Sales vs Last Year % = 
-VAR PriorYearSales = 
-    CALCULATE([Total Sales], SAMEPERIODLASTYEAR(DimDate[Date]))
-RETURN
-    DIVIDE([Total Sales] - PriorYearSales, PriorYearSales)
-```
+A recurring design decision was making comparisons context-aware. For example, showing a QoQ change when the user has multiple years selected would be misleading, so the measure returns `"--"` instead:
 
-**Context-aware comparison logic:**
 ```dax
 Sales vs Last Quarter % = 
 VAR YearsSelected = DISTINCTCOUNT(DimDate[Year])
@@ -92,176 +62,105 @@ RETURN
     IF(YearsSelected <> 1 || NOT QuarterLevel, "--", [Calculation])
 ```
 
-**4. Interactive Features**
-- **Customer Drill-Through Page:** Right-click any customer → Full profile with purchase history, product mix, order timeline
-- **Geographic Product Tooltip:** Hover over country → Top 3 products sold
-- **Product Customer Tooltip:** Hover over product → Top 3 customers purchasing
-- **Dynamic Period Display:** Adapts to selected filters (year/quarter/month)
+Standard time intelligence using `SAMEPERIODLASTYEAR`:
+
+```dax
+Sales vs Last Year % = 
+VAR PriorYearSales = 
+    CALCULATE([Total Sales], SAMEPERIODLASTYEAR(DimDate[Date]))
+RETURN
+    DIVIDE([Total Sales] - PriorYearSales, PriorYearSales)
+```
+
+### Interactive Features
+- **Customer drill-through:** Right-click any customer name to open a full profile page with purchase history, product breakdown, and order timeline
+- **Geographic tooltips:** Hover over a country to see its top 3 products
+- **Product tooltips:** Hover over a product to see its top 3 customers
+- **Dynamic period display:** Labels and titles adapt to whatever filter combination is active
 
 ---
 
-## 💡 Business Impact & Strategic Insights
+## Key Findings and Recommendations
 
-### Critical Findings
+### 1. Customer Retention Problem
 
-**1. Customer Retention Crisis** 🚨
-- Top 5 customers change completely year-over-year
-- Example: Anthem went from €38K (2020) to minimal activity (2021-2022)
-- **Impact:** Unstable revenue base, increased acquisition costs
+This was the biggest red flag. The top 5 revenue customers changed completely every year. Anthem, for instance, went from €38K in 2020 to near-zero in subsequent years. Without a retention mechanism, the company is essentially re-acquiring its revenue base annually.
 
-**2. Product Portfolio Insights**
-- **Alchemy** (Star Product): 40% margin, 473% growth 2020-2023, #1 profit contributor
-- **ContactMatcher** (Loss Leader): Top revenue but -0.3% margin in 2023
-- Strategic opportunity: Bundle ContactMatcher + Alchemy
+**Recommendation:** Implement customer health scoring, assign dedicated account managers to high-value accounts, and build out a customer success function. This alone accounts for most of the projected €400K profit improvement.
 
-**3. Geographic Expansion Opportunity**
-- Southeast Asia: >25% margins (vs 12.47% average)
-- Underutilized high-margin market
-- Japan: -15% margin requires fix-or-exit decision
+### 2. Product Portfolio Imbalance
 
-### Strategic Recommendations
+Alchemy is the clear winner — high margin, strong growth, top profit contributor. ContactMatcher is the opposite: highest revenue but negative margin. The question isn't whether to kill ContactMatcher (it drives customer acquisition), but whether to deliberately position it as a bundled entry point alongside higher-margin products like Alchemy.
 
-**Priority 1: Customer Retention Program**
-- Implement customer health scoring
-- Assign account managers to top accounts
-- Build customer success team
-- **Projected Impact:** €400K+ profit improvement
+**Recommendation:** Scale Alchemy aggressively (2x revenue target), formalize ContactMatcher as a strategic loss leader, and implement bundling.
 
-**Priority 2: Product Portfolio Optimization**
-- Reposition ContactMatcher as strategic loss leader
-- Scale Alchemy aggressively (2x revenue target)
-- Implement bundling strategy
+### 3. Geographic Concentration Risk
 
-**Priority 3: Geographic Expansion**
-- Enter high-margin SEA markets
-- Diversify UK beyond London (currently 90% concentrated)
-- Address Japan profitability
+Southeast Asian markets are delivering margins above 25% vs. the 12.47% company average, but remain underinvested. Meanwhile, Japan sits at -15% margin and needs a fix-or-exit decision. The UK market is 90% concentrated in London — a diversification risk.
+
+**Recommendation:** Prioritize SEA expansion, address Japan profitability, diversify UK presence beyond London.
 
 ---
 
-## 📁 Documentation
+## Documentation
 
-### [📄 Technical Documentation](docs/Technical_Documentation.md)
-Complete technical reference covering:
-- Data validation methodology (SQL)
-- Star schema architecture
-- All 50+ DAX formulas with explanations
-- Dashboard page specifications
-- Advanced features implementation
-- Design decisions and rationale
-- 25-hour development timeline
+### [Technical Documentation](docs/Technical_Documentation.md)
+Full reference covering data validation (SQL), star schema design, all 50+ DAX formulas with rationale, page specifications, and the ~25-hour development timeline. 1,167 lines.
 
-**Size:** 1,167 lines | 36KB
-
-### [📊 Business Insights & Strategic Recommendations](docs/Business_Insights.md)
-CFO-ready analysis including:
-- Current state financial performance
-- Key findings (retention crisis, product opportunities)
-- Risk assessment (prioritized)
-- 3 detailed strategic recommendations with action plans
-- Implementation timeline (Q1-Q4 2026)
-- Expected financial impact (€1.1-1.2M revenue, 16-17% margins)
-
-**Size:** 486 lines | 21KB
+### [Business Insights & Strategic Recommendations](docs/Business_Insights.md)
+CFO-oriented analysis: current state assessment, risk prioritization, three strategic recommendations with action plans, implementation timeline (Q1–Q4 2026), and projected financial impact (€1.1–1.2M revenue, 16–17% margins). 486 lines.
 
 ---
 
-## 📸 Dashboard Visuals
+## Dashboard Screenshots
 
 <details>
-<summary><b>Click to view all dashboard pages</b></summary>
+<summary><b>View all pages</b></summary>
 
 ### Executive Summary
 ![Executive Summary](docs/Screenshots/01_Executive_Summary.jpg)
-*Financial KPIs, growth trends, segment analysis*
 
 ### Customer Analysis
 ![Customer Analysis](docs/Screenshots/02_Customer_Analysis.jpg)
-*Customer segmentation, top accounts, industry distribution*
 
 ### Geography Analysis
 ![Geography Analysis](docs/Screenshots/03_Geography_Analysis.jpg)
-*Regional performance, Pareto analysis, market opportunities*
 
 ### Portfolio Analysis
 ![Portfolio Analysis](docs/Screenshots/04_Portfolio_Analysis.jpg)
-*Product profitability, portfolio matrix, strategic positioning*
 
-### Customer Drill-Through (Interactive Feature)
+### Customer Drill-Through
 ![Customer Profile](docs/Screenshots/05_Customer_Drillthrough.jpg)
-*Individual customer deep-dive with purchase history*
 
-### Multi-Dimensional Tooltips (Interactive Feature)
+### Tooltips
 ![Tooltip Demo](docs/Screenshots/06_Tooltip_Demo.jpg)
-*Hover interactions showing product-customer relationships*
 
 </details>
 
 ---
 
-## 🎓 Skills Demonstrated
+## Skills Applied
 
-### Technical Skills
-- **Power BI:** Advanced dashboard development, visual design, UX optimization
-- **DAX:** Time intelligence, context-aware logic, complex calculations (50+ measures)
-- **SQL:** Data validation, quality assurance, integrity checks
-- **Data Modeling:** Star schema design, relationship optimization
-- **Power Query:** ETL transformations, data type handling
+**Technical:** Power BI (advanced visuals, UX design), DAX (time intelligence, context-aware logic), SQL (data validation), star schema modeling, Power Query (ETL)
 
-### Business Skills
-- **Financial Analysis:** Revenue analysis, profitability metrics, margin analysis
-- **Strategic Thinking:** Risk assessment, opportunity identification, prioritization
-- **Business Intelligence:** KPI development, executive reporting, insight generation
-- **Stakeholder Communication:** CFO-ready deliverables, actionable recommendations
-
-### Analytical Skills
-- Customer retention analysis (cohort behavior)
-- Product portfolio strategy (BCG matrix approach)
-- Geographic market analysis (Pareto principle)
-- Competitive positioning and pricing strategy
+**Business:** Revenue and profitability analysis, customer retention analysis, product portfolio strategy (BCG-style), geographic market assessment, executive-level reporting
 
 ---
 
-## 🚀 Key Technologies
+## Project Details
 
-![Power BI](https://img.shields.io/badge/Power%20BI-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)
-![DAX](https://img.shields.io/badge/DAX-F2C811?style=for-the-badge)
-![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)
-![Power Query](https://img.shields.io/badge/Power%20Query-217346?style=for-the-badge&logo=microsoft-excel&logoColor=white)
-
----
-
-## 📊 Project Statistics
-
-| Metric | Value |
-|--------|-------|
-| **Development Time** | ~25 hours |
-| **Dashboard Pages** | 7 (4 visible, 3 hidden) |
-| **DAX Measures** | 50+ |
-| **Data Points** | 9,800 transactions |
-| **Customers Analyzed** | 99 |
-| **Countries Covered** | 48 |
-| **Documentation** | 1,653 lines (57KB) |
-| **Strategic Impact** | €400K+ projected profit |
+| | |
+|---|---|
+| Development time | ~25 hours |
+| Dashboard pages | 7 (4 main + 3 hidden/support) |
+| DAX measures | 50+ |
+| Transactions | 9,800 |
+| Customers | 99 |
+| Countries | 48 |
+| Documentation | 1,653 lines |
+| Dataset | [AWS SaaS Sales](https://www.kaggle.com/) (public) |
+| Completed | January 2026 |
 
 ---
 
-## 💼 About This Project
-
-This project was developed as part of my career transition into Business Intelligence and Financial Analysis roles. It demonstrates end-to-end capabilities from data validation through strategic business recommendations.
-
-**Project Type:** Portfolio / Case Study  
-**Completed:** January 2026  
-**Dataset:** AWS SaaS Sales (Kaggle - public dataset)
-
----
-
-## 🙏 Acknowledgments
-
-- Dataset: AWS SaaS Sales from Kaggle
-- Tools: Power BI Desktop, SQLite, VS Code
-- Design inspiration: Enterprise SaaS dashboards and financial reporting best practices
-
----
-
-*If you found this project helpful, please ⭐ star the repository!*
+Built as part of my transition into Business Intelligence and Financial Analysis. The focus was on demonstrating end-to-end capability: from data validation and modeling through to strategic business recommendations that a leadership team could act on.
